@@ -1,24 +1,22 @@
 import { ErrorMapper } from "utils/ErrorMapper";
-import { roleUpgrader } from './roles/upgrader';
-import { roleHarvester } from './roles/harvester';
-import { roleBuilder } from './roles/builder';
+import { roleUpgrader } from "./roles/upgrader";
+import { roleHarvester } from "./roles/harvester";
+import { roleBuilder } from "./roles/builder";
 import { spawn } from "child_process";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-
-
   const totalCreeps: number = Object.keys(Game.creeps).length;
-  const roles: { [index: string]: number; } = { 'harvester': 3, 'upgrader': 1, 'builder': 1 };
+  const roles: { [index: string]: number } = { harvester: 3, upgrader: 1, builder: 1 };
   // const roles = RoleSpecification[] = [{role:'harvester', amount:3}];
-  const spawnName: string = 'Spawn1';
+  const spawnName: string = "Spawn1";
   const defaultSpawn: StructureSpawn = Game.spawns[spawnName];
   if (defaultSpawn) {
     const roomName: string = defaultSpawn.room.name;
     if (totalCreeps < 10 && !defaultSpawn.spawning) {
       for (const role in roles) {
-        var amountOfRole = _.filter(Game.creeps, (creep) => creep.memory.role == role);
+        var amountOfRole = _.filter(Game.creeps, creep => creep.memory.role == role);
         if (amountOfRole.length < roles[role]) {
           var newName = role + Game.time;
 
@@ -29,13 +27,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
       }
     }
 
-    if (Game.spawns[spawnName].spawning) {
+    if (defaultSpawn.spawning) {
       var spawningCreep = Game.creeps[defaultSpawn.spawning.name];
-      defaultSpawn.room.visual.text(
-        '🛠️' + spawningCreep.memory.role,
-        defaultSpawn.pos.x + 1,
-        defaultSpawn.pos.y,
-        { align: 'left', opacity: 0.8 });
+      defaultSpawn.room.visual.text("🛠️" + spawningCreep.memory.role, defaultSpawn.pos.x + 1, defaultSpawn.pos.y, {
+        align: "left",
+        opacity: 0.8
+      });
     }
   }
 
@@ -61,13 +58,13 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
 
     switch (creep.memory.role) {
-      case 'harvester':
+      case "harvester":
         roleHarvester.run(creep);
         break;
-      case 'upgrader':
+      case "upgrader":
         roleBuilder.run(creep);
         break;
-      case 'upgrader':
+      case "upgrader":
         roleUpgrader.run(creep);
         break;
     }

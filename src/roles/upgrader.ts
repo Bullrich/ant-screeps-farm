@@ -14,13 +14,13 @@ export module roleUpgrader {
     if (creep.memory.working) {
       const controller: StructureController | undefined = creep.room.controller;
       if (controller)
-        if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
+        if (creep.upgradeController(controller) === ERR_NOT_IN_RANGE) {
           creep.moveTo(controller, { visualizePathStyle: { stroke: '#ffffff' } });
         }
     }
     else {
-      var sources = creep.room.find(FIND_SOURCES);
-      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+      const sources = creep.room.find(FIND_SOURCES);
+      if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
         creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
       }
     }
