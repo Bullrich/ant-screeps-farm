@@ -13,18 +13,29 @@ export const loop = ErrorMapper.wrapLoop(() => {
   const spawnName: string = "Spawn1";
   const defaultSpawn: StructureSpawn = Game.spawns[spawnName];
   if (defaultSpawn) {
-    const roomName: string = defaultSpawn.room.name;
-    if (totalCreeps < 10 && !defaultSpawn.spawning) {
-      for (const role in roles) {
-        var amountOfRole = _.filter(Game.creeps, creep => creep.memory.role == role);
-        if (amountOfRole.length < roles[role]) {
-          var newName = role + Game.time;
-
-          console.log(`Spawning new ${role}: ${newName}`);
-          const spawnOptions: SpawnOptions = { memory: { role: role, room: roomName, working: false } };
-          defaultSpawn.spawnCreep([WORK, CARRY, MOVE], newName, spawnOptions);
-        }
+    for (const role in roles) {
+      var amountOfRole = _.filter(Game.creeps, creep => creep.memory.role == role);
+      if (amountOfRole.length < roles[role]) {
+        if (keepMinimumAmount(role, roles[role])) continue;
+        else break;
       }
+    }
+
+    function keepMinimumAmount(role: string, minimum: number): boolean {
+      var amountOfRole = _.filter(Game.creeps, creep => creep.memory.role == role);
+      if (amountOfRole.length < minimum) return spawnCreep(role);
+
+      return true;
+    }
+
+    function spawnCreep(role: string): boolean {
+      const newName = role + Game.time;
+      const roomName: string = defaultSpawn.room.name;
+      const spawnOptions: SpawnOptions = { memory: { role: role, room: roomName, working: false } };
+      const result = defaultSpawn.spawnCreep([WORK, CARRY, MOVE], newName, spawnOptions);
+      if (result == 0) console.log(`Spawning new ${role}: ${newName}`);
+      else if (result != -6) console.log(`Couldn't spawn new ${role}. Error ${result}`);
+      return result == 0;
     }
 
     if (defaultSpawn.spawning) {
