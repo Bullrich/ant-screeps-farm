@@ -5,7 +5,7 @@ export module roleHarvester {
       var sources = creep.room.find(FIND_SOURCES);
       if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
         creep.moveTo(sources[0], { visualizePathStyle: { stroke: "#ffaa00" } });
-        creep.say("🔄 harvest");
+        if (Game.time % 5 == 0) creep.say("🔄 harvest");
       }
     } else {
       var targets = creep.room.find(FIND_STRUCTURES, {
@@ -19,8 +19,11 @@ export module roleHarvester {
       if (targets.length > 0) {
         if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
           creep.moveTo(targets[0], { visualizePathStyle: { stroke: "#ffffff" } });
-          creep.say("🚚 deposit");
+          if (Game.time % 5 == 0) creep.say("🚚 deposit");
         }
+      } else {
+        creep.moveTo(30, 30);
+        if (Game.time % 5 == 0) creep.say("⛩ idle");
       }
     }
   }

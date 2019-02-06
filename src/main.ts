@@ -8,7 +8,7 @@ import { spawn } from "child_process";
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
   const totalCreeps: number = Object.keys(Game.creeps).length;
-  const roles: { [index: string]: number } = { harvester: 3, upgrader: 1, builder: 1 };
+  const roles: { [index: string]: number } = { harvester: 3, upgrader: 3, builder: 1 };
   // const roles = RoleSpecification[] = [{role:'harvester', amount:3}];
   const spawnName: string = "Spawn1";
   const defaultSpawn: StructureSpawn = Game.spawns[spawnName];
@@ -72,7 +72,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
       case "harvester":
         roleHarvester.run(creep);
         break;
-      case "upgrader":
+      case "builder":
         roleBuilder.run(creep);
         break;
       case "upgrader":
